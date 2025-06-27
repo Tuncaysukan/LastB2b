@@ -3,23 +3,12 @@
     <!-- Yeni Ekle Button -->
     <button 
       @click="$emit('new-item')"
-      class="px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors flex items-center shadow-sm"
+      class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center shadow-sm"
     >
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
       </svg>
       {{ newButtonText }}
-    </button>
-    
-    <!-- Market Button -->
-    <button 
-      @click="$emit('market')"
-      class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center shadow-sm"
-    >
-      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-      </svg>
-      Market
     </button>
   </div>
 </template>
@@ -32,13 +21,13 @@ const props = defineProps({
   }
 })
 
-defineEmits(['new-item', 'market'])
+defineEmits(['new-item'])
 
 // Dynamic button text based on category
 const categoryTexts = {
   hotel: 'Yeni Otel',
   tour: 'Yeni Tur', 
-  flight: 'Yeni Uçak',
+  flight: 'Yeni Uçuş',
   transfer: 'Yeni Transfer',
   activity: 'Yeni Aktivite',
   rentacar: 'Yeni Araç',

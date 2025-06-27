@@ -5,7 +5,7 @@
          :class="{ '-translate-x-full lg:translate-x-0': !sidebarOpen, 'translate-x-0': sidebarOpen }">
       
       <!-- Logo Header -->
-      <div class="flex items-center justify-center h-16 px-4 bg-brand-gradient">
+              <div class="flex items-center justify-center h-16 px-4 bg-gradient-to-r from-blue-500 to-purple-600">
         <div class="flex items-center space-x-3">
           <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
             <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
             
             <!-- Profile -->
             <div class="flex items-center space-x-3">
-              <div class="w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center">
+              <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                 <span class="text-white text-sm font-medium">AD</span>
               </div>
               <div class="hidden md:block">
@@ -112,6 +112,12 @@
         <!-- Otel Listesi Sayfası -->
         <HotelList v-else-if="selectedCategory === 'hotel'" />
         
+        <!-- Tur Listesi Sayfası -->
+        <TourList v-else-if="selectedCategory === 'tour'" />
+        
+        <!-- Uçuş Listesi Sayfası -->
+        <FlightList v-else-if="selectedCategory === 'flight'" />
+        
         <!-- Diğer Kategori Sayfaları -->
         <ProductsGrid v-else-if="selectedCategory" :category="selectedCategory" />
         
@@ -138,6 +144,8 @@ import CategoryButton from '@/components/CategoryButton.vue'
 import DashboardHome from '@/components/DashboardHome.vue'
 import ProductsGrid from '@/components/ProductsGrid.vue'
 import HotelList from '@/components/HotelList.vue'
+import TourList from '@/components/TourList.vue'
+import FlightList from '@/components/FlightList.vue'
 
 // Reactive data
 const sidebarOpen = ref(false)
