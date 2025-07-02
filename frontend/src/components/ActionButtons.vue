@@ -2,7 +2,7 @@
   <div class="flex items-center space-x-2">
     <!-- Yeni Ekle Button -->
     <button 
-      @click="$emit('new-item')"
+      @click="handleNewItem"
       class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center shadow-sm"
     >
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,7 +21,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['new-item'])
+const emit = defineEmits(['new-item'])
 
 // Dynamic button text based on category
 const categoryTexts = {
@@ -39,4 +39,17 @@ const categoryTexts = {
 }
 
 const newButtonText = categoryTexts[props.category] || 'Yeni Ekle'
+
+// Handle new item click
+const handleNewItem = () => {
+  if (props.category === 'tour') {
+    // For tour category, open tour type selection modal
+    if (window.openTourTypeModal) {
+      window.openTourTypeModal()
+    }
+  } else {
+    // For other categories, emit the normal event
+    emit('new-item')
+  }
+}
 </script> 

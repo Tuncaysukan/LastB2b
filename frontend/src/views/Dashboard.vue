@@ -118,6 +118,9 @@
         <!-- Uçuş Listesi Sayfası -->
         <FlightList v-else-if="selectedCategory === 'flight'" />
         
+        <!-- Transfer Listesi Sayfası -->
+        <TransferList v-else-if="selectedCategory === 'transfer'" />
+        
         <!-- Diğer Kategori Sayfaları -->
         <ProductsGrid v-else-if="selectedCategory" :category="selectedCategory" />
         
@@ -134,6 +137,103 @@
 
     <!-- Mobile sidebar overlay -->
     <div v-if="sidebarOpen" @click="closeSidebar" class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden"></div>
+
+    <!-- Tour Type Selection Modal -->
+    <div v-if="showTourTypeModal" class="fixed inset-0 z-50 overflow-y-auto">
+      <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="closeTourTypeModal"></div>
+      
+      <div class="flex min-h-full items-center justify-center p-4">
+        <div class="relative w-full max-w-lg bg-white rounded-lg shadow-xl transform transition-all">
+          
+          <!-- Header -->
+          <div class="bg-red-500 text-white px-6 py-4 rounded-t-lg">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xl font-semibold">Yeni Tur Ekle</h3>
+                <p class="text-red-100 text-sm mt-1">Tur bilgilerini eksiksiz doldurun</p>
+              </div>
+              <button @click="closeTourTypeModal" class="text-white hover:bg-red-600 rounded p-1 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="px-6 py-4">
+            <!-- Tur Seçenekleri -->
+            <div class="flex flex-wrap justify-center gap-3">
+              <button 
+                @click="openTourWizard('daily')"
+                class="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
+              >
+                Günübirlik / Konaklamalı
+              </button>
+              
+              <button 
+                @click="openTourWizard('activity')"
+                class="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors text-sm font-medium"
+              >
+                Aktivite
+              </button>
+              
+              <button 
+                @click="openTourWizard('package')"
+                class="px-4 py-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition-colors text-sm font-medium"
+              >
+                Seyehat Paketi
+              </button>
+              
+              <button 
+                @click="openTourWizard('private')"
+                class="px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors text-sm font-medium"
+              >
+                Özel Tur
+              </button>
+              
+              <button 
+                @click="openTourWizard('health')"
+                class="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors text-sm font-medium border-2 border-red-700"
+              >
+                Sağlık Paketleri
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour Wizards -->
+    <TourWizard 
+      :isOpen="showDailyTourWizard"
+      @close="closeDailyTourWizard"
+      @save="saveDailyTour"
+    />
+    
+    <ActivityWizard 
+      :isOpen="showActivityWizard"
+      @close="closeActivityWizard"
+      @save="saveActivity"
+    />
+    
+    <TravelPackageWizard 
+      :isOpen="showPackageWizard"
+      @close="closePackageWizard"
+      @save="savePackage"
+    />
+    
+    <PrivateTourWizard 
+      :isOpen="showPrivateTourWizard"
+      @close="closePrivateTourWizard"
+      @save="savePrivateTour"
+    />
+    
+    <HealthTourWizard 
+      :isOpen="showHealthWizard"
+      @close="closeHealthWizard"
+      @save="saveHealthTour"
+    />
   </div>
 </template>
 
@@ -146,11 +246,25 @@ import ProductsGrid from '@/components/ProductsGrid.vue'
 import HotelList from '@/components/HotelList.vue'
 import TourList from '@/components/TourList.vue'
 import FlightList from '@/components/FlightList.vue'
+import TransferList from '@/components/TransferList.vue'
+import TourWizard from '@/components/TourWizard.vue'
+import ActivityWizard from '@/components/ActivityWizard.vue'
+import TravelPackageWizard from '@/components/TravelPackageWizard.vue'
+import PrivateTourWizard from '@/components/PrivateTourWizard.vue'
+import HealthTourWizard from '@/components/HealthTourWizard.vue'
 
 // Reactive data
 const sidebarOpen = ref(false)
 const activeMenu = ref('home')
 const selectedCategory = ref(null) // null = Ana sayfalar, string = Seçili kategori
+
+// Tour Wizard States
+const showTourTypeModal = ref(false)
+const showDailyTourWizard = ref(false)
+const showActivityWizard = ref(false)
+const showPackageWizard = ref(false)
+const showPrivateTourWizard = ref(false)
+const showHealthWizard = ref(false)
 
 // Menu items
 const menuItems = ref([
@@ -210,6 +324,91 @@ const getActiveMenuTitle = () => {
   const menu = menuItems.value.find(item => item.id === activeMenu.value)
   return menu ? menu.title : 'Dashboard'
 }
+
+// Tour Type Modal Methods
+const openTourTypeModal = () => {
+  showTourTypeModal.value = true
+}
+
+const closeTourTypeModal = () => {
+  showTourTypeModal.value = false
+}
+
+// Tour Wizard Methods
+const openTourWizard = (type) => {
+  closeTourTypeModal()
+  
+  switch(type) {
+    case 'daily':
+      showDailyTourWizard.value = true
+      break
+    case 'activity':
+      showActivityWizard.value = true
+      break
+    case 'package':
+      showPackageWizard.value = true
+      break
+    case 'private':
+      showPrivateTourWizard.value = true
+      break
+    case 'health':
+      showHealthWizard.value = true
+      break
+  }
+}
+
+// Daily Tour Wizard
+const closeDailyTourWizard = () => {
+  showDailyTourWizard.value = false
+}
+
+const saveDailyTour = (data) => {
+  console.log('Günübirlik/Konaklamalı Tur Saved:', data)
+  // API call yapılacak
+}
+
+// Activity Wizard
+const closeActivityWizard = () => {
+  showActivityWizard.value = false
+}
+
+const saveActivity = (data) => {
+  console.log('Aktivite Saved:', data)
+  // API call yapılacak
+}
+
+// Package Wizard
+const closePackageWizard = () => {
+  showPackageWizard.value = false
+}
+
+const savePackage = (data) => {
+  console.log('Seyehat Paketi Saved:', data)
+  // API call yapılacak
+}
+
+// Private Tour Wizard
+const closePrivateTourWizard = () => {
+  showPrivateTourWizard.value = false
+}
+
+const savePrivateTour = (data) => {
+  console.log('Özel Tur Saved:', data)
+  // API call yapılacak
+}
+
+// Health Tour Wizard
+const closeHealthWizard = () => {
+  showHealthWizard.value = false
+}
+
+const saveHealthTour = (data) => {
+  console.log('Sağlık Paketi Saved:', data)
+  // API call yapılacak
+}
+
+// Expose openTourTypeModal to global scope for ActionButtons
+window.openTourTypeModal = openTourTypeModal
 </script>
 
 <style scoped>
