@@ -260,6 +260,28 @@ const products = ref([
     rating: 4.6,
     image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&h=200&fit=crop',
     description: 'Lüks araç transferi'
+  },
+  {
+    id: 5,
+    name: 'Toyota Corolla',
+    category: 'rentacar',
+    location: 'İstanbul',
+    price: 250,
+    status: 'active',
+    rating: 4.3,
+    image: 'https://images.unsplash.com/photo-1549924231-f129b911e442?w=300&h=200&fit=crop',
+    description: 'Ekonomi sınıfı araç'
+  },
+  {
+    id: 6,
+    name: 'BMW 3 Series',
+    category: 'rentacar',
+    location: 'Ankara',
+    price: 450,
+    status: 'active',
+    rating: 4.7,
+    image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=300&h=200&fit=crop',
+    description: 'Lüks sınıf araç'
   }
 ])
 
@@ -358,7 +380,8 @@ const getCategoryBadgeClass = (category) => {
     tour: 'bg-blue-100 text-blue-800',
     flight: 'bg-green-100 text-green-800',
     transfer: 'bg-purple-100 text-purple-800',
-    activity: 'bg-yellow-100 text-yellow-800'
+    activity: 'bg-yellow-100 text-yellow-800',
+    rentacar: 'bg-orange-100 text-orange-800'
   }
   return classes[category] || 'bg-gray-100 text-gray-800'
 }
