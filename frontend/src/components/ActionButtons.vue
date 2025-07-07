@@ -47,6 +47,11 @@ const handleNewItem = () => {
     if (window.openTourTypeModal) {
       window.openTourTypeModal()
     }
+  } else if (props.category === 'rentacar') {
+    // For rentacar category, open rentacar wizard directly
+    if (window.openRentacarWizard) {
+      window.openRentacarWizard()
+    }
   } else {
     // For other categories, emit the normal event
     emit('new-item')

@@ -121,6 +121,9 @@
         <!-- Transfer Listesi Sayfası -->
         <TransferList v-else-if="selectedCategory === 'transfer'" />
         
+        <!-- Rentacar Listesi Sayfası -->
+        <RentacarList v-else-if="selectedCategory === 'rentacar'" />
+        
         <!-- Diğer Kategori Sayfaları -->
         <ProductsGrid v-else-if="selectedCategory" :category="selectedCategory" />
         
@@ -234,6 +237,13 @@
       @close="closeHealthWizard"
       @save="saveHealthTour"
     />
+    
+    <!-- Rentacar Wizard -->
+    <RentacarWizard 
+      :isOpen="showRentacarWizard"
+      @close="closeRentacarWizard"
+      @save="saveRentacar"
+    />
   </div>
 </template>
 
@@ -247,11 +257,13 @@ import HotelList from '@/components/HotelList.vue'
 import TourList from '@/components/TourList.vue'
 import FlightList from '@/components/FlightList.vue'
 import TransferList from '@/components/TransferList.vue'
+import RentacarList from '@/components/RentacarList.vue'
 import TourWizard from '@/components/TourWizard.vue'
 import ActivityWizard from '@/components/ActivityWizard.vue'
 import TravelPackageWizard from '@/components/TravelPackageWizard.vue'
 import PrivateTourWizard from '@/components/PrivateTourWizard.vue'
 import HealthTourWizard from '@/components/HealthTourWizard.vue'
+import RentacarWizard from '@/components/RentacarWizard.vue'
 
 // Reactive data
 const sidebarOpen = ref(false)
@@ -265,6 +277,9 @@ const showActivityWizard = ref(false)
 const showPackageWizard = ref(false)
 const showPrivateTourWizard = ref(false)
 const showHealthWizard = ref(false)
+
+// Rentacar Wizard State
+const showRentacarWizard = ref(false)
 
 // Menu items
 const menuItems = ref([
@@ -407,8 +422,24 @@ const saveHealthTour = (data) => {
   // API call yapılacak
 }
 
-// Expose openTourTypeModal to global scope for ActionButtons
+// Rentacar Wizard
+const openRentacarWizard = () => {
+  showRentacarWizard.value = true
+}
+
+const closeRentacarWizard = () => {
+  showRentacarWizard.value = false
+}
+
+const saveRentacar = (data) => {
+  console.log('Rentacar Saved:', data)
+  // API call yapılacak
+  showRentacarWizard.value = false
+}
+
+// Expose openTourTypeModal and openRentacarWizard to global scope for ActionButtons
 window.openTourTypeModal = openTourTypeModal
+window.openRentacarWizard = openRentacarWizard
 </script>
 
 <style scoped>
